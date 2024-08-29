@@ -50,5 +50,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'welcome';
+
+// Auto-routing of controller/method/params
+$route['(:any)'] = '$1';
+$route['(:any)/(:any)'] = '$1/$2';
+$route['(:any)/(:any)/(:any)'] = '$1/$2/$3';
+
+// Handle 404 errors
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
