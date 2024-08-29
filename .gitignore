@@ -11,65 +11,20 @@ application/logs/*
 !application/logs/.htaccess
 
 # mpdf ttfontdata
-application/third_party/mpdf/ttfontdata/*
 
 container-build/web/000-default.conf
 system/sessions/
 
 */config/*/*
-!*/config/*/.gitkeep
-!*/config/*/*.example
-
-iub_admissions/application/logs/*
-iubafi/demo/application/logs/*
-my/application/logs/*
 
 # Vendor
-vendor
-
-iub_admissions/uploads/*
-iub_admissions/uploads-old/*
-iub_admissions/adm.zip
-
-iub_courses/uploads/*
-
-iub_testing/uploads/*
-
-iubafi/uploads/*
-iubafi/demo/uploads/*
-iubafi/demo/.uploads/*
-iubafi/demo/application/logs/*
-
-uploads/*
-uploads.old/*
-uploads1/*
-ba_bsc_images/*
-
-job_portal_cms/uploads/*
-
-kcdc/uploads/*
-
-meritlists/Files/*
-meritlists/meritlists/*
-job_test_results/Files/*
-
-my/uploads/*
+vendor/*
 
 *.zip
-
-iub_eportal_removed/*
-
-iub_testing/uploads/*
-iub_testing/application/logs/*
-admissions+applications/*
 
 #ignore robots.txt
 robots.txt
 
-sendgrid.env
-php.ini
+.env
 
-#usersonline temp file
-usersonline.tmp
-nbproject
 

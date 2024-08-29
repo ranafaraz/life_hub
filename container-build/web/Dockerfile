@@ -8,6 +8,7 @@ FROM php:8.2.15-apache
 # Install required dependencies and PHP extensions
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        ca-certificates \
         vim \
         git \
         unzip \
@@ -16,7 +17,6 @@ RUN apt-get update \
         libpng-dev \
         libssh2-1-dev \
         libldap2-dev \
-        libpng-dev \
         libjpeg-dev \
         libfreetype6-dev \
         libonig-dev \
@@ -32,10 +32,10 @@ RUN apt-get update \
     && docker-php-ext-enable ssh2 \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug \
-    && echo 'extension=ldap' >> /usr/local/etc/php/conf.d/ldap.ini \
-    && echo 'xdebug.remote_enable=on' >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo 'xdebug.remote_host=host.docker.internal' >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo 'xdebug.remote_port=9000' >>  /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo 'xdebug.mode=debug' >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo 'xdebug.client_host=host.docker.internal' >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo 'xdebug.client_port=9003' >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo 'xdebug.start_with_request=yes' >> /usr/local/etc/php/conf.d/xdebug.ini \
     && a2enmod rewrite \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && echo "AllowEncodedSlashes On" >> /etc/apache2/apache2.conf \
@@ -45,18 +45,21 @@ RUN apt-get update \
 # Set PHP memory limit
 RUN echo 'memory_limit = -1' > /usr/local/etc/php/conf.d/docker-php-memlimit.ini
 
-# Copy the Apache virtual host configuration
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-
 # Set the working directory to the root of the CodeIgniter project
 WORKDIR /var/www/html
 
-# Install Composer dependencies (you can remove this if using `docker-compose run`)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
+# Copy Composer files
+COPY ../../composer.json ./
+
+# Install dependencies, generating composer.lock if it doesn’t exist
+RUN composer install --no-dev --optimize-autoloader || composer update --no-dev --optimize-autoloader
 
 # Restart Apache to apply changes
 RUN service apache2 restart
 
 # Expose the Apache port
 EXPOSE 80
+
+#docker-compose down
+#docker-compose build --no-cache
+#docker-compose up

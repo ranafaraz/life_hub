@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => '',
-	'password' => '',
-	'database' => '',
+	'hostname' => getenv('CI_DB_LIFEHUB_HOSTNAME') ?: 'localhost',  // Use 'db' as the default if the environment variable is not set
+	'username' => getenv('CI_DB_LIFEHUB_USERNAME') ?: 'root',  // Default to 'root' if not set
+	'password' => getenv('CI_DB_LIFEHUB_PASSWORD') ?: '',  // Default to empty if not set
+	'database' => getenv('CI_DB_LIFEHUB_NAME') ?: 'life_hub',  // Default to 'life_hub' if not set
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
