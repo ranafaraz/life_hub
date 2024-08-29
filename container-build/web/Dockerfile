@@ -69,6 +69,8 @@ EXPOSE 80
 # Restart Apache: docker-compose exec web service apache2 restart
 # Containers: docker ps -a
 # Restart Webservice: docker-compose up -d web
-#
+# Build and Start the Containers: docker-compose up -d --build
+# Access the Node.js Container: docker-compose exec node bash
+
 
 
