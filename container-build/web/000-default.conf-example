@@ -1,0 +1,21 @@
+# 000-default-temp.conf
+# Receive variables from docker-compose-temp.yml
+#   - SetEnv MYSQL_PORT ${MYSQL_PORT}
+
+<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/html
+
+    SetEnv CI_ENV staging
+
+    #iub-eportal
+    SetEnv CI_DB_EPORTAL_HOSTNAME xxx.xxx.xx.xx
+    SetEnv CI_DB_EPORTAL_USERNAME username
+    SetEnv CI_DB_EPORTAL_PASSWORD password
+    SetEnv CI_DB_EPORTAL_NAME DB_NAME
+
+    SetEnv CI_SMTP_HOST ssl://hostname
+    SetEnv CI_SMTP_USER email@email.com
+    SetEnv CI_SMTP_PASSWORD ******
+    SetEnv CI_SMTP_PORT ***
+</VirtualHost>
