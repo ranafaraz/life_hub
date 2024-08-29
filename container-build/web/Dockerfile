@@ -63,3 +63,12 @@ EXPOSE 80
 #docker-compose down
 #docker-compose build --no-cache
 #docker-compose up
+#docker-compose restart db
+# MySQL CLI: docker exec -it life_hub-db-1 mysql -u root -p
+# Application Logs: docker-compose logs web
+# Restart Apache: docker-compose exec web service apache2 restart
+# Containers: docker ps -a
+# Restart Webservice: docker-compose up -d web
+#
+
+
