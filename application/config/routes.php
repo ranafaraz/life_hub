@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'welcome';
-
+$route['file_upload'] = 'welcome/file_upload';
 // Auto-routing of controller/method/params
 $route['(:any)'] = '$1';
 $route['(:any)/(:any)'] = '$1/$2';
