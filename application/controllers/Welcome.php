@@ -40,20 +40,6 @@ class Welcome extends CI_Controller {
 		if ($query) {
 			// Fetch the result as an array
 			$result = $query->row_array();
-			// Fetch the table as an array
-
-			$create_table_query = $this->db->query("CREATE TABLE educator_users (
-													user_type int,
-													user_firstname varchar(255),
-													user_lastname varchar(255),
-													username varchar(255),
-													dob varchar(255),
-													org_name varchar(255),
-													class varchar(255),
-													budget varchar(255),
-													educator_mail varchar(255)
-												)");
-
 			// Display the name of the connected database
 			echo "Connected to database: " . $result['db_name'];
 		} else {
