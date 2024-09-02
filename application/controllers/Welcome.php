@@ -23,6 +23,7 @@ class Welcome extends CI_Controller {
 		parent::__construct();
 		// Load the database library
 		$this->load->database();
+		$this->load->helper('url');
 	}
 
 	public function index()
@@ -45,5 +46,57 @@ class Welcome extends CI_Controller {
 			// Display an error message if the query fails
 			echo "Failed to connect to the database.";
 		}
+	}
+
+	public function file_upload(){
+		$CI =& get_instance();
+		if($this->input->server('REQUEST_METHOD') === 'POST'){
+			$file = $_FILES["college_file"]["tmp_name"]; // getting temporary source of excel file
+			require 'application/third_party/PHPExcel/IOFactory.php';
+			$objPHPExcel = PHPExcel_IOFactory::load($file);
+			$data = [];
+			foreach ($objPHPExcel->getWorksheetIterator() as $worksheet)
+			{
+				$highestRow = $worksheet->getHighestRow();
+				if('UserType' == $worksheet->getCellByColumnAndRow(0, 1)->getValue() &&
+					'First Name' == $worksheet->getCellByColumnAndRow(1, 1)->getValue() &&
+					'Last Name' == $worksheet->getCellByColumnAndRow(2, 1)->getValue() &&
+					'Username' == $worksheet->getCellByColumnAndRow(3, 1)->getValue() &&
+					'Date Of Birth' == $worksheet->getCellByColumnAndRow(4, 1)->getValue() &&
+					'Organization Name' == $worksheet->getCellByColumnAndRow(5, 1)->getValue() &&
+					'Class' == $worksheet->getCellByColumnAndRow(6, 1)->getValue() &&
+					'Budget' == $worksheet->getCellByColumnAndRow(7, 1)->getValue() &&
+					'Educator Email' == $worksheet->getCellByColumnAndRow(8, 1)->getValue()){
+					for($row=2; $row<=$highestRow; $row++)
+					{
+						if(!empty($worksheet->getCellByColumnAndRow(0, $row)->getValue())){
+							$data[] = [
+								'user_type' => $worksheet->getCellByColumnAndRow(0, $row)->getValue(),
+								'user_firstname' => $worksheet->getCellByColumnAndRow(1, $row)->getValue(),
+								'user_lastname' => $worksheet->getCellByColumnAndRow(2, $row)->getValue(),
+								'username' => $worksheet->getCellByColumnAndRow(3, $row)->getValue(),
+								'dob' => $worksheet->getCellByColumnAndRow(4, $row)->getValue(),
+								'org_name' => $worksheet->getCellByColumnAndRow(5, $row)->getValue(),
+								'class' => $worksheet->getCellByColumnAndRow(6, $row)->getValue(),
+								'budget' => $worksheet->getCellByColumnAndRow(7, $row)->getValue(),
+								'educator_mail' => $worksheet->getCellByColumnAndRow(8, $row)->getValue()
+							];
+						}
+					}
+					if(!empty($data)){
+						if($this->db->insert_batch('educator_users', $data)){
+
+						}else{
+		     				echo "Something went wrong. Please try again.";die();
+						}
+					}
+				}else{
+					echo "Columns name or order changed, Download sample file again and then upload it.";die();
+				}
+			}
+			redirect('file_upload');
+		}
+		$record['userdata'] = $this->db->query("SELECT * FROM educator_users")->result_array();
+		$this->load->view('import_users',$record);
 	}
 }
